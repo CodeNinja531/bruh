@@ -159,19 +159,6 @@ class App(tk.Tk):
 
 
 # timer-------------------------------------------------------------------------------
-def format_time(seconds):
-    hours = int(seconds // 3600)
-    minutes = int((seconds % 3600) // 60)
-    second = int(seconds % 60)
-    small_seconds = int((seconds - int(seconds)) * 10)
-    return f"{hours:02d}:{minutes:02d}:{second:02d}.{small_seconds:01d}"
-
-
-def nothing_click():
-    url = "https://bit.ly/3BlS71b"
-    os.system(f"start {url}")
-
-
 class timer(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -182,37 +169,55 @@ class timer(tk.Frame):
         self.start_time = 0
         self.duration = 60
         self.mute = False
+        self.tick = 100
 
-        # Create window elements
+        # Timer body
         self.time_label = tk.Label(self, text="00:00:00.0", font=('Arial', 30))
         self.time_label.pack(pady=20)
 
+        # textbox for input
         self.duration_entry = tk.Entry(self, font=('Arial', 16), width=10)
         self.duration_entry.pack(pady=10)
         self.duration_entry.insert(0, "60")
 
+        # textbox reminder
         self.tip_label = tk.Label(self, text="countdown time (s)(integer)", font=('Arial', 10))
         self.tip_label.pack(pady=2)
 
+        # button (start and stop)
         self.start_button = tk.Button(self, text="start", font=('Arial', 18), width=10, height=1)
         self.start_button.pack(pady=16)
 
+        # very nice quiet button
         self.mute_button = tk.Button(self, text="mute", font=('Arial', 15), width=10, height=1)
         self.mute_button.pack(pady=1)
 
+        # Just a funny prank
         self.nothing = tk.Button(self, text="nothing here", font=('Arial', 10), width=16, height=1)
         self.nothing.pack(pady=98)
 
+        # useless (just a decoration)
         self.stop_button = tk.Button(self, text="stop", font=('Arial', 18), width=10, height=1)
         self.stop_button.pack(pady=100)
 
-        # Button click functions
+        # Button click functions(link to function)
         self.start_button.config(command=self.start_button_click)
         self.stop_button.config(command=self.stop_button_click)
         self.mute_button.config(command=self.mute_button_click)
         self.nothing.config(command=nothing_click)
 
+    def format_time(seconds):
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        second = int(seconds % 60)
+        small_seconds = int((seconds - int(seconds)) * 10)
+        return f"{hours:02d}:{minutes:02d}:{second:02d}.{small_seconds:01d}"
+
     def update_time(self):
+        """
+        At certain time interval(self.tick), sync with datetime.
+        When remaining_time <= 0, play music
+        """
         if self.is_running:
             remaining_time = self.duration - (datetime.datetime.now() - self.start_time).total_seconds()
             if remaining_time <= 0:
@@ -225,9 +230,14 @@ class timer(tk.Frame):
                         pygame.mixer.music.play()
             else:
                 self.time_label.config(text=format_time(float(remaining_time)))
-                self.after(100, self.update_time)
+                self.after(self.tick, self.update_time)
 
     def start_button_click(self):
+        """
+        Change button name to stop/start
+        Check time is valid or not
+        Start the other functions
+        """
         if self.is_running:
             self.is_running = False
             self.start_button.config(text="start")
@@ -254,30 +264,51 @@ class timer(tk.Frame):
             self.update_time()
 
     def stop_button_click(self):
+        """
+        Useless, just for testing and decoration
+        """
         self.is_running = False
         self.start_button.config(text="start")
         self.mute_button.config(text="mute")
         self.time_label.config(text=format_time(0))
 
     def mute_button_click(self):
+        """
+        To mute the oiiaio
+        Change the button name to mute/unmute
+        """
         self.mute = not self.mute
         if self.mute:
             self.mute_button.config(text="unmute")
         else:
             self.mute_button.config(text="mute")
 
+    
+    def nothing_click():
+        url = "https://bit.ly/3BlS71b"
+        os.system(f"start {url}")
+
 
 # random--------------------------------------------------------------------------------
 class Random(tk.Frame):
+    """
+    Generate random results according the DB data
+    Changeable random list
+    Changeable amount of item to be chosen
+    Random lists: ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
+    """
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+
+        # initialize database
         self.db = db()  # Create an instance of the DB class for database operations
 
+        # Labe reminder
         self.label_widget = tk.Label(self, text="Please enter the items below:")
         self.label_widget.pack(pady=0)
 
-        # Text widget
+        # Text widget (changeable, for random list edit)
         self.text_widget = tk.Text(self, width=40, height=10)
         self.text_widget.pack(pady=10)
 
@@ -290,11 +321,13 @@ class Random(tk.Frame):
         self.table_options = ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
         self.selected_table = tk.StringVar(value=self.table_options[0])
 
+        # Dropdown table setup
         self.table_dropdown = ttk.Combobox(self, textvariable=self.selected_table, values=self.table_options,
                                            state="readonly")
         self.table_dropdown.pack(pady=5)
         self.table_dropdown.current(0)
 
+        # Bind dropdown to function _on_change
         self.table_dropdown.bind("<<ComboboxSelected>>", self._on_dropdown_change)
         self._on_dropdown_change()  # Initialize text widget
 
@@ -309,10 +342,21 @@ class Random(tk.Frame):
         self.button_widget = tk.Button(self, text="choose", command=self.choose_random)
         self.button_widget.pack(pady=10)
 
+    def _populate_items(self):
+        table = self.selected_table.get()
+        original_list = self.db.retrieve(table)
+        for name in original_list:
+            self.text_widget.insert(tk.END, name + "\n")
+
     def _on_dropdown_change(self, event=1):
+        """
+        event: place holder (useless)
+        Called when user changes the dropdown option
+        """
         if event:
             table = self.selected_table.get()
             data = self.db.retrieve(table)
+            self._populate_itmes()
             self.text_widget.delete("1.0", tk.END)
             for item in data:
                 self.text_widget.insert(tk.END, item + "\n")
