@@ -56,6 +56,16 @@ class db:
                                     [(num,) for num in numbers])
             self.conn.commit()
 
+        # genshin
+        try:
+            self.cursor.execute("SELECT item FROM Genshin")
+        except sqlite3.OperationalError:
+            self.cursor.execute('''CREATE TABLE Genshin (item TEXT)''')
+            genshin_list = ["HuTao", "Furina", "Naganohara Yoimiya", "Yae Miko", "ShenHe", "Raiden Shogun", "Kamisato Ayaka", ]
+            self.cursor.executemany("INSERT INTO Genshin (item) VALUES (?)",
+                                    [(i,) for i in genshin_list])
+            self.conn.commit()
+
         # <custom>
         try:
             self.cursor.execute("SELECT item FROM \"<custom>\"")
@@ -266,7 +276,7 @@ class Random(tk.Frame):
             self.text_widget.insert(tk.END, name + "\n")
 
         # Dropdown list
-        self.table_options = ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', '<custom>', ]
+        self.table_options = ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
         self.selected_table = tk.StringVar(value=self.table_options[0])
 
         self.table_dropdown = ttk.Combobox(self, textvariable=self.selected_table, values=self.table_options,
@@ -278,7 +288,7 @@ class Random(tk.Frame):
         self._on_dropdown_change()  # Initialize text widget
 
         # Entry for number of results
-        self.label_widget = tk.Label(self, text="Amount to be chosen：")
+        self.label_widget = tk.Label(self, text="Amount to be chosen:")
         self.label_widget.pack(pady=1)
 
         self.entry_widget = tk.Entry(self)
