@@ -11,6 +11,9 @@ import math
 
 # Database iz here
 class db:
+    """
+    Very fun database thing
+    """
     def __init__(self):
         """Initialize the database connection and ensure the table exists."""
         self.conn = sqlite3.connect('database/names.db')
@@ -361,9 +364,15 @@ class Random(tk.Frame):
                 self.text_widget.insert(tk.END, item + "\n")
 
     def choose_random(self):
+        """
+        When choose button pressed, update the input to DB
+        randomly chooses and show result in popup messagebox
+        """
         text = self.text_widget.get("1.0", tk.END)
         text_list = text.split("\n")
         filtered_list = [line.strip() for line in text_list if line.strip()]
+        
+        # update the data to DB
         table = self.selected_table.get()
         if table not in ['numbers(1-10)', 'numbers(1-30)', ]:
             self.db.update(filtered_list, table)
@@ -389,22 +398,35 @@ class Random(tk.Frame):
 
 # coffee--------------------------------------------------------------------------------------
 class BuyCoffee(tk.Frame):
+    """
+    A page for people to support me
+    attatched a cute HuTao (my wife)
+    and an alipay collect coin code
+    """
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
 
+        # sentence
         label = tk.Label(self, text="Support the developer with a coffee :)")
         label.pack(pady=20)
 
+        # support button connected to pop screen
         button = tk.Button(self, text="Buy me a coffee", command=self.buy_coffee)
         button.pack(pady=8)
 
+        # HuTao image
         self.coffee_image = tk.PhotoImage(file="photos/hutao.png")
         image_label = tk.Label(self, image=self.coffee_image)
         image_label.pack()
 
     def buy_coffee(self):
         """
+        Popup screen for payment
+        When button pressed...
+        """
+        """
+        ------------------ useless original code ------------------------
         url = "https://drive.google.com/file/d/1in5D_qa6Kuk7LTvteFFGD1asNAzJNSum/view?usp=sharing"
         os.system(f"start {url}")
         """
@@ -414,11 +436,6 @@ class BuyCoffee(tk.Frame):
         alipay = tk.PhotoImage(file="photos/alipay.png")
         image_label = tk.Label(popup, image=alipay)
         image_label.pack()
-
-
-def support():
-    url = "https://www.shallwetalk.hk/zh/get-help/online-support/"
-    os.system(f"start {url}")
 
 
 class help(tk.Frame):
@@ -440,8 +457,14 @@ class help(tk.Frame):
         image_label = tk.Label(self, image=self.arrow)
         image_label.pack(pady=10)
 
-        button = tk.Button(self, text="Mental support", command=support)
+        button = tk.Button(self, text="Mental support", command=self.support)
         button.pack()
+    
+    
+    def support(self):
+        url = "https://www.shallwetalk.hk/zh/get-help/online-support/"
+        os.system(f"start {url}")
+
 
 
 if __name__ == "__main__":
