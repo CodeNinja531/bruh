@@ -6,6 +6,7 @@ import datetime
 import random
 import sqlite3
 import os
+import math
 
 
 # Database iz here
@@ -190,7 +191,7 @@ class timer(tk.Frame):
         self.duration_entry.pack(pady=10)
         self.duration_entry.insert(0, "60")
 
-        self.tip_label = tk.Label(self, text="countdown time (s)", font=('Arial', 10))
+        self.tip_label = tk.Label(self, text="countdown time (s)(integer)", font=('Arial', 10))
         self.tip_label.pack(pady=2)
 
         self.start_button = tk.Button(self, text="start", font=('Arial', 18), width=10, height=1)
@@ -232,11 +233,21 @@ class timer(tk.Frame):
             self.start_button.config(text="start")
         else:
             try:
-                self.duration = int(self.duration_entry.get())
-            except ValueError:
+                self.duration = int(eval(self.duration_entry.get()))
+            except:
+                messagebox.showwarning("Alert", "Time in wrong format")
                 self.duration = 60
                 self.duration_entry.delete(0, tk.END)
                 self.duration_entry.insert(0, "60")
+                return
+            else:
+                if self.duration <= 0 or float(eval(self.duration_entry)) != self.duration:
+                    messagebox.showwarning("Alert", "please enter an integer >0")
+                    self.duration = 60
+                    self.duration_entry.delete(0, tk.END)
+                    self.duration_entry.insert(0, "60")
+                    return
+                
             self.start_time = datetime.datetime.now()
             self.is_running = True
             self.start_button.config(text="stop")
