@@ -233,7 +233,7 @@ class timer(tk.Frame):
             self.start_button.config(text="start")
         else:
             try:
-                self.duration = int(eval(self.duration_entry.get()))
+                self.duration = int(math.ceil(eval(self.duration_entry.get())))
             except:
                 messagebox.showwarning("Alert", "Time in wrong format")
                 self.duration = 60
