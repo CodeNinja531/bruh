@@ -204,9 +204,9 @@ class timer(tk.Frame):
         self.start_button.config(command=self.start_button_click)
         self.stop_button.config(command=self.stop_button_click)
         self.mute_button.config(command=self.mute_button_click)
-        self.nothing.config(command=nothing_click)
+        self.nothing.config(command=self.nothing_click)
 
-    def format_time(seconds):
+    def format_time(self, seconds):
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
         second = int(seconds % 60)
@@ -223,13 +223,13 @@ class timer(tk.Frame):
             if remaining_time <= 0:
                 self.is_running = False
                 self.start_button.config(text="Start")
-                self.time_label.config(text=format_time(0))
+                self.time_label.config(text=self.format_time(0))
                 if not self.mute:
                     for i in range(3):
                         pygame.mixer.music.load("sound/alarm.mp3")
                         pygame.mixer.music.play()
             else:
-                self.time_label.config(text=format_time(float(remaining_time)))
+                self.time_label.config(text=self.format_time(float(remaining_time)))
                 self.after(self.tick, self.update_time)
 
     def start_button_click(self):
@@ -270,7 +270,7 @@ class timer(tk.Frame):
         self.is_running = False
         self.start_button.config(text="start")
         self.mute_button.config(text="mute")
-        self.time_label.config(text=format_time(0))
+        self.time_label.config(text=self.format_time(0))
 
     def mute_button_click(self):
         """
@@ -283,8 +283,7 @@ class timer(tk.Frame):
         else:
             self.mute_button.config(text="mute")
 
-    
-    def nothing_click():
+    def nothing_click(self):
         url = "https://bit.ly/3BlS71b"
         os.system(f"start {url}")
 
