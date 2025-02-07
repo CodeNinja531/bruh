@@ -430,43 +430,56 @@ class BuyCoffee(tk.Frame):
         url = "https://drive.google.com/file/d/1in5D_qa6Kuk7LTvteFFGD1asNAzJNSum/view?usp=sharing"
         os.system(f"start {url}")
         """
+        # make a toplevel popup screen
         popup = tk.Toplevel(self)
         popup.title("gimme some $$$")
 
+        # show alipay code photo
         alipay = tk.PhotoImage(file="photos/alipay.png")
         image_label = tk.Label(popup, image=alipay)
         image_label.pack()
 
 
 class help(tk.Frame):
+    """
+    A literally useless help page
+    shows some bad jokes
+    """
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
 
+        # text label
         label = tk.Label(self, text="Sorry, there is nothing I can do to help you")
         label.pack(pady=20)
 
+        # Image of Pimon (fun)
         self.paimon = tk.PhotoImage(file="photos/paimon.png")
         image_label = tk.Label(self, image=self.paimon)
         image_label.pack(pady=10)
 
+        # text label above image
         label = tk.Label(self, text="Maybe you need this")
         label.pack()
-
+        
+        # arrow pic (small)
         self.arrow = tk.PhotoImage(file="photos/arrow.png")
         image_label = tk.Label(self, image=self.arrow)
         image_label.pack(pady=10)
 
+        # Another prank button for mental help
         button = tk.Button(self, text="Mental support", command=self.support)
         button.pack()
-    
-    
+       
     def support(self):
+        """
+        Shall we talk, shall we talk -- Eason Chan
+        """
         url = "https://www.shallwetalk.hk/zh/get-help/online-support/"
         os.system(f"start {url}")
 
 
-
+# Start and initialize the App
 if __name__ == "__main__":
     app = App()
     app.mainloop()
