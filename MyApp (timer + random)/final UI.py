@@ -167,7 +167,7 @@ def format_time(seconds):
 
 
 def nothing_click():
-    url = "https://shattereddisk.github.io/rickroll/rickroll.mp4"
+    url = "https://bit.ly/3BlS71b"
     os.system(f"start {url}")
 
 
