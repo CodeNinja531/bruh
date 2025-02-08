@@ -77,19 +77,42 @@ class db:
             self.cursor.execute('''CREATE TABLE "<custom>" (item TEXT)''')
 
     def retrieve(self, table):
-        # Retrieve all names from the 'names' table.
-        self.cursor.execute(f"SELECT item FROM \"{table}\"")
-        names = self.cursor.fetchall()
-        return [name[0] for name in names]
-
+        """
+        Retrieve all names from the 'names' table.
+        """
+        try:
+            self.cursor.execute(f"SELECT item FROM \"{table}\"")
+            names = self.cursor.fetchall()
+            return [name[0] for name in names]
+        except sqlite3.OperationalError:
+            # The table name for retrieval is wrong
+            print(f"Table '{table}' not found.")
+            return []  # Return an empty list 
+    
+    def get_table_names(self):
+        """
+        Retrieves a list of table names from the database.
+        """
+        try:
+            self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tables = self.cursor.fetchall()
+            return [table[0] for table in tables]  # Extract table names from the result
+        except sqlite3.Error as e:
+            print(f"Error retrieving table names: {e}")
+            return [] 
+    
     def update(self, data_list, table):
-        """Replace all entries in the 'names' table with the provided list of names."""
+        """
+        Replace all entries in the table with the provided data_list.
+        """
         self.cursor.execute(f"DELETE FROM \"{table}\"")
         self.cursor.executemany(f"INSERT INTO \"{table}\" (item) VALUES (?)", [(name,) for name in data_list])
         self.conn.commit()
 
     def close(self):
-        """Close the database connection."""
+        """
+        Close the database connection.
+        """
         self.conn.close()
 
 
