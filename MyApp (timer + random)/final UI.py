@@ -358,7 +358,7 @@ class Random(tk.Frame):
         if event:
             table = self.selected_table.get()
             data = self.db.retrieve(table)
-            self._populate_itmes()
+            self._populate_items()
             self.text_widget.delete("1.0", tk.END)
             for item in data:
                 self.text_widget.insert(tk.END, item + "\n")
