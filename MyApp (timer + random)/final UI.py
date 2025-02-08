@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import Menu, messagebox
+from tkinter import Menu
+from tkinter import messagebox
 import pygame
 import datetime
 import random
@@ -15,7 +16,9 @@ class db:
     Very fun database thing
     """
     def __init__(self):
-        """Initialize the database connection and ensure the table exists."""
+        """
+        Initialize the database connection and ensure the table exists.
+        """
         self.conn = sqlite3.connect('database/names.db')
         self.cursor = self.conn.cursor()
         self.create_default()
@@ -322,8 +325,7 @@ class timer(tk.Frame):
 class Random(tk.Frame):
     """
     Generate random results according the DB data
-    Changeable random list
-    Changeable amount of item to be chosen
+    Changeable random list & amount of item to be chosen
     Random lists: ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
     """
     def __init__(self, parent, controller):
@@ -348,6 +350,8 @@ class Random(tk.Frame):
 
         # Dropdown list
         self.table_options = ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
+        if self.table_options != db.get_table_names():
+            print("The table list is incorrect")
         self.selected_table = tk.StringVar(value=self.table_options[0])
 
         # Dropdown table setup
@@ -372,6 +376,9 @@ class Random(tk.Frame):
         self.button_widget.pack(pady=10)
 
     def _populate_items(self):
+        """
+        To make the text widget items in '/n'-seperated format
+        """
         table = self.selected_table.get()
         original_list = self.db.retrieve(table)
         for name in original_list:
