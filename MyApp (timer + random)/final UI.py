@@ -233,11 +233,15 @@ class timer(tk.Frame):
         self.nothing.config(command=self.nothing_click)
 
     def format_time(self, seconds):
+        """
+        make 'seconds' become hours, minutes, second
+        1 small_second = 0.1 s
+        """
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
         second = int(seconds % 60)
-        small_seconds = int((seconds - int(seconds)) * 10)
-        return f"{hours:02d}:{minutes:02d}:{second:02d}.{small_seconds:01d}"
+        small_second = int((seconds - int(seconds)) * 10)
+        return f"{hours:02d}:{minutes:02d}:{second:02d}.{small_second:01d}"
 
     def update_time(self):
         """
