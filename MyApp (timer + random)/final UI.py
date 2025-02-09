@@ -32,6 +32,7 @@ class db:
     """
     Very fun database thing
     """
+
     def __init__(self):
         """
         Initialize the database connection and ensure the table exists.
@@ -85,7 +86,8 @@ class db:
             self.cursor.execute("SELECT item FROM Genshin")
         except sqlite3.OperationalError:
             self.cursor.execute('''CREATE TABLE Genshin (item TEXT)''')
-            genshin_list = ["HuTao", "Furina", "Naganohara Yoimiya", "Yae Miko", "ShenHe", "Raiden Shogun", "Kamisato Ayaka", ]
+            genshin_list = ["HuTao", "Furina", "Naganohara Yoimiya", "Yae Miko", "ShenHe", "Raiden Shogun",
+                            "Kamisato Ayaka", ]
             self.cursor.executemany("INSERT INTO Genshin (item) VALUES (?)",
                                     [(i,) for i in genshin_list])
             self.conn.commit()
@@ -107,8 +109,8 @@ class db:
         except sqlite3.OperationalError:
             # The table name for retrieval is wrong
             print(f"Table '{table}' not found.")
-            return []  # Return an empty list 
-    
+            return []  # Return an empty list
+
     def get_table_names(self):
         """
         Retrieves a list of table names from the database.
@@ -119,8 +121,8 @@ class db:
             return [table[0] for table in tables]  # Extract table names from the result
         except sqlite3.Error as e:
             print(f"Error retrieving table names: {e}")
-            return [] 
-    
+            return []
+
     def update(self, data_list, table):
         """
         Replace all entries in the table with the provided data_list.
@@ -307,7 +309,7 @@ class timer(tk.Frame):
                     self.duration_entry.delete(0, tk.END)
                     self.duration_entry.insert(0, "60")
                     return
-                
+
             self.start_time = datetime.datetime.now()
             self.is_running = True
             self.start_button.config(text="stop")
@@ -345,6 +347,7 @@ class Random(tk.Frame):
     Changeable random list & amount of item to be chosen
     Random lists: ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
     """
+
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
@@ -422,7 +425,7 @@ class Random(tk.Frame):
         text = self.text_widget.get("1.0", tk.END)
         text_list = text.split("\n")
         filtered_list = [line.strip() for line in text_list if line.strip()]
-        
+
         # update the data to DB
         table = self.selected_table.get()
         if table not in ['numbers(1-10)', 'numbers(1-30)', ]:
@@ -454,6 +457,7 @@ class BuyCoffee(tk.Frame):
     attatched a cute HuTao (my wife)
     and an alipay collect coin code
     """
+
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
@@ -496,6 +500,7 @@ class help(tk.Frame):
     A literally useless help page
     shows some bad jokes
     """
+
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
@@ -512,7 +517,7 @@ class help(tk.Frame):
         # text label above image
         label = tk.Label(self, text="Maybe you need this")
         label.pack()
-        
+
         # arrow pic (small)
         self.arrow = tk.PhotoImage(file="photos/arrow.png")
         image_label = tk.Label(self, image=self.arrow)
@@ -521,7 +526,7 @@ class help(tk.Frame):
         # Another prank button for mental help
         button = tk.Button(self, text="Mental support", command=self.support)
         button.pack()
-       
+
     def support(self):
         """
         Shall we talk, shall we talk -- Eason Chan

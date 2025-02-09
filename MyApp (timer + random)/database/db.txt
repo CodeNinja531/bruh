@@ -61,6 +61,16 @@ Table: numbers(1-30)
 "29"
 "30"
 
+Table: Genshin
+"item"
+"HuTao"
+"Furina"
+"Naganohara Yoimiya"
+"Yae Miko"
+"ShenHe"
+"Raiden Shogun"
+"Kamisato Ayaka"
+
 Table: <custom>
 "item"
 
