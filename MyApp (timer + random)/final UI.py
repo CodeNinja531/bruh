@@ -1,13 +1,29 @@
-import tkinter as tk
+import datetime
+import random
+import os
+import math
+
+# some module which may not be installed
+try:
+    import pygame
+except ModuleNotFoundError:
+    os.system('pip install pygame')
+    import pygame
+
+try:
+    import sqlite3
+except ModuleNotFoundError:
+    os.system('pip install sqlite3')
+
+try:
+    import tkinter as tk
+except ModuleNotFoundError:
+    os.system('pip install tkinter')
+    import tkinter as tk
+
 from tkinter import ttk
 from tkinter import Menu
 from tkinter import messagebox
-import pygame
-import datetime
-import random
-import sqlite3
-import os
-import math
 
 
 # Database iz here
