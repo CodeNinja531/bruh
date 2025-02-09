@@ -14,6 +14,7 @@ try:
     import sqlite3
 except ModuleNotFoundError:
     os.system('pip install sqlite3')
+    import sqlite3
 
 try:
     import tkinter as tk
@@ -366,7 +367,7 @@ class Random(tk.Frame):
 
         # Dropdown list
         self.table_options = ['S5ICT', 'teachers', 'numbers(1-10)', 'numbers(1-30)', 'Genshin', '<custom>', ]
-        if self.table_options != db.get_table_names():
+        if self.table_options != self.db.get_table_names():
             print("The table list is incorrect")
         self.selected_table = tk.StringVar(value=self.table_options[0])
 
