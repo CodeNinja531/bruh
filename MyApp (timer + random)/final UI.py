@@ -2,6 +2,7 @@ import datetime
 import random
 import os
 import math
+from PIL import Image, ImageTk
 
 # some module which may not be installed
 try:
@@ -471,9 +472,15 @@ class BuyCoffee(tk.Frame):
         button.pack(pady=8)
 
         # HuTao image
-        self.coffee_image = tk.PhotoImage(file="photos/hutao.png")
-        image_label = tk.Label(self, image=self.coffee_image)
-        image_label.pack()
+        try:
+            hutao_image = Image.open("photos/hutao.png")
+            self.coffee_image = ImageTk.PhotoImage(hutao_image) # Keep a reference
+            image_label = tk.Label(self, image=self.coffee_image)
+            image_label.pack()
+        except FileNotFoundError:
+            print("Hu Tao image not found!")
+        except Exception as e:
+            print(f"Error loading Hu Tao image: {e}")
 
     def buy_coffee(self):
         """
@@ -490,10 +497,15 @@ class BuyCoffee(tk.Frame):
         popup.title("gimme some $$$")
 
         # show alipay code photo
-        alipay = tk.PhotoImage(file="photos/alipay.png")
-        image_label = tk.Label(popup, image=alipay)
-        image_label.pack()
-
+        try:
+            alipay_image = Image.open("photos/alipay.png")
+            alipay = ImageTk.PhotoImage(alipay_image) # Keep a reference
+            image_label = tk.Label(popup, image=alipay)
+            image_label.pack()
+        except FileNotFoundError:
+            print("Alipay image not found!")
+        except Exception as e:
+            print(f"Error loading Alipay image: {e}")
 
 class help(tk.Frame):
     """
@@ -510,18 +522,30 @@ class help(tk.Frame):
         label.pack(pady=20)
 
         # Image of Pimon (fun)
-        self.paimon = tk.PhotoImage(file="photos/paimon.png")
-        image_label = tk.Label(self, image=self.paimon)
-        image_label.pack(pady=10)
+        try:
+            paimon_image = Image.open("photos/paimon.png")
+            self.paimon = ImageTk.PhotoImage(paimon_image) # Keep a reference
+            image_label = tk.Label(self, image=self.paimon)
+            image_label.pack(pady=10)
+        except FileNotFoundError:
+            print("Paimon image not found!")
+        except Exception as e:
+            print(f"Error loading Paimon image: {e}")
 
         # text label above image
         label = tk.Label(self, text="Maybe you need this")
         label.pack()
 
         # arrow pic (small)
-        self.arrow = tk.PhotoImage(file="photos/arrow.png")
-        image_label = tk.Label(self, image=self.arrow)
-        image_label.pack(pady=10)
+        try:
+            arrow_image = Image.open("photos/arrow.png")
+            self.arrow = ImageTk.PhotoImage(arrow_image) # Keep a reference
+            image_label = tk.Label(self, image=self.arrow)
+            image_label.pack(pady=10)
+        except FileNotFoundError:
+            print("Arrow image not found!")
+        except Exception as e:
+            print(f"Error loading Arrow image: {e}")
 
         # Another prank button for mental help
         button = tk.Button(self, text="Mental support", command=self.support)
