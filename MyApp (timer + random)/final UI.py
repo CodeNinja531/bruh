@@ -303,7 +303,7 @@ class timer(tk.Frame):
                 self.duration_entry.insert(0, "60")
                 return
             else:
-                if self.duration <= 0 or float(eval(self.duration_entry)) != self.duration:
+                if self.duration <= 0 or float(eval(str(self.duration_entry))) != self.duration:
                     messagebox.showwarning("Alert", "please enter an integer >0")
                     self.duration = 60
                     self.duration_entry.delete(0, tk.END)
