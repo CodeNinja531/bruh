@@ -2,7 +2,6 @@ import datetime
 import random
 import os
 import math
-from PIL import Image, ImageTk
 
 # some module which may not be installed
 try:
@@ -22,6 +21,12 @@ try:
 except ModuleNotFoundError:
     os.system('pip install tkinter')
     import tkinter as tk
+
+try:
+    from PIL import Image, ImageTk
+except ModuleNotFoundError:
+    os.system('pip install pillow')
+    from PIL import Image, ImageTk
 
 from tkinter import ttk
 from tkinter import Menu
